@@ -101,11 +101,27 @@ def get_dealerships(request):
 def get_dealer_details(request, dealer_id):
     context = {}
     if request.method == "GET":
-        url = "https://us-south.functions.appdomain.cloud/api/v1/web/2cf20d01-9870-4773-9500-60d21111ef82/dealership-package/get-review.json/?id="
+        url = "https://us-south.functions.appdomain.cloud/api/v1/web/2cf20d01-9870-4773-9500-60d21111ef82/dealership-package/get-review.json/?id="+str(dealer_id)
         reviews = get_dealer_reviews_from_cf(url, dealer_id)
-        review_text = ' '.join([r.review for r in reviews])
+        print(reviews)
+        review_text = ' '.join([r.sentiment for r in reviews])
         return HttpResponse(review_text)
 
 # Create a `add_review` view to submit a review
-# def add_review(request, dealer_id):
-# ...
+def add_review(request, dealer_id):
+    context = {}
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            url = "https://us-south.functions.appdomain.cloud/api/v1/web/2cf20d01-9870-4773-9500-60d21111ef82/dealership-package/post-review.json?id="+str(dealer_id)
+            review = dict()
+            review["time"] = datetime.utcnow().isoformat()
+            review["dealership"] = dealer_id
+            review["review"] = request.POST["content"]
+            review["name"] = request.user.username
+            review["purchase"] = True
+            
+            json_payload = dict()
+            json_payload["review"] = review
+
+            response = post_request(url, json_payload, dealer_id=dealer_id)
+            return HttpResponse(response)
