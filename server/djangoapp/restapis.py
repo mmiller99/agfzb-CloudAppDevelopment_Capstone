@@ -1,6 +1,6 @@
 import requests
 import json
-from .models import CarDealer
+from .models import CarDealer, DealerReview
 from requests.auth import HTTPBasicAuth
 
 
@@ -47,9 +47,26 @@ def get_dealers_from_cf(url, **kwargs):
     return results
 
 # Create a get_dealer_reviews_from_cf method to get reviews by dealer id from a cloud function
-# def get_dealer_by_id_from_cf(url, dealerId):
+
 # - Call get_request() with specified arguments
 # - Parse JSON results into a DealerView object list
+def get_dealer_reviews_from_cf(url, dealer_id):
+    results = []
+    json_result = get_request(url, dealer_id=dealer_id)
+
+    if json_result:
+        reviews = json_result["body"]["data"]["docs"]
+
+        for review in reviews:
+            review_obj = review_obj = DealerReview(dealership=dealer_review["dealership"],
+                            name=dealer_review["name"],
+                            purchase=dealer_review["purchase"],
+                            review=dealer_review["review"]) 
+            results.append(review_obj)
+
+    return resutls
+
+
 
 
 # Create an `analyze_review_sentiments` method to call Watson NLU and analyze text
