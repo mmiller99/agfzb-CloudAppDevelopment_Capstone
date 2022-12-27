@@ -79,9 +79,9 @@ class DealerReview:
         self.purchase = purchase
         self.review = review
         self.purchase_date = ""
-        self.purchase_make = ""
-        self.purchase_model = ""
-        self.purchase_year = ""
+        self.car_make = ""
+        self.car_model = ""
+        self.car_year = ""
         self.sentiment = ""
         self.id = ""
 

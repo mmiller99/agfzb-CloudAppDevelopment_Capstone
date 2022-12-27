@@ -5,6 +5,13 @@
     <title>Dealership Review</title>
     {% load static %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link
+      href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css"
+      rel="stylesheet"
+    />
 </head>
 
     <body>
@@ -16,12 +23,12 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="navbar-header mr-auto">
-            <a class="navbar-brand" href="#">Dealership Review</a>
+            <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Dealership Review</a>
           </div>
   
           <ul class="nav navbar-nav ">
             {% if user.is_authenticated %}
-            <button href="{% url 'djangoapp:add_review' dealer_id %}">Add Review</button>
+            <a class="btn btn-link" href="{% url 'djangoapp:add_review' dealer_id %}">Add Review</a>
             <li>
               <a class="btn btn-link" href="#">{{user.first_name}}({{user.username}})</a>
               <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
@@ -50,6 +57,7 @@
               </li>
             </ul>
         </div>
+        </div>
       </nav>
     <!-- Add reviews as cards -->
         <div class="container-fluid">
@@ -67,18 +75,19 @@
                             <img class="card-img-left" src="{{MEDIA_URL}}/emoji/neutral.png" width="36px" height="36px"
                                 alt="Sentiment">
                             {% endif %}
+                            <div class="card-body bg-light">
+                                {% if review.car_make %}
+                                    <h5 class="card-title">{{review.car_make}}, {{review.car_model}} </h5>
+                                    <h5 class="card-title">{{review.car_year}}</h5>
+                                {% endif %}
+                                <p class="card-text">{{review.review}}</p>
+                            </div>
                         </div>
+
+
                     {% endfor %}
-                    <div class="card-body bg-light">
-                        {% if review.car_make %}
-                            <h5 class="card-title">{{review.car_make}}, {{review.car_model}} </h5>
-                            <h5 class="card-title">{{review.car_year}}</h5>
-                        {% endif %}
-                        <p class="card-text">{{review.review}}</p>
-                    </div>
                 </div>
             </div>
         </div>
     </body>
-
 </html>
