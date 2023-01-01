@@ -111,9 +111,9 @@ def get_dealer_details(request, dealer_id):
 def add_review(request, dealer_id):
     context = {}
     url = "https://us-south.functions.appdomain.cloud/api/v1/web/2cf20d01-9870-4773-9500-60d21111ef82/dealership-package/get-dealership.json"
-    dealer = get_dealer_by_id_from_cf(url, dealer_id)
-    print(dealer)
-    context["dealer"] = dealer
+    dealers = get_dealers_from_cf(url)
+    dealer = filter(lambda d: (d.id == dealer_id), dealers)
+    context["dealer"] = list(dealer)[0]
     context["dealer_id"] = dealer_id
     if request.method == 'GET':
         cars = CarModel.objects.all()
